@@ -14,7 +14,7 @@ void setup() {
 
 void loop() {
   // print guide
-  Serial.println("Welcome to Student Fee Viewer!");
+  Serial.println("\nWelcome to Student Fee Viewer!");
   delay(1000);
   Serial.println("\nCODE \t LOAD (UNITS) \t DISCOUNT");
   Serial.println("A \t 24 \t \t 5%");
@@ -27,43 +27,64 @@ void loop() {
   Serial.println("\nEnter your code in the input field above.");
   while (Serial.available() == 0) {};
   char enteredCode = Serial.read();
-  Serial.println("\nYou entered: " + enteredCode);
+  Serial.print("You entered: ");
+  Serial.println(enteredCode);
   delay(1000);
 
-  // calculate fees
+  // check input (Code)
   switch (enteredCode) {
     case('A'): {
       load = 24;
       normalDiscountPercentage = 0.05;
       scholarshipDiscount = 0;
+      break;
     };
     case('B'): {
       load = 26;
       normalDiscountPercentage = 0.06;
       scholarshipDiscount = 5000;
+      break;
     };
     case('C'): {
       load = 27;
       normalDiscountPercentage = 0.07;
       scholarshipDiscount = 3000;
+      break;
     };
     case('D'): {
       load = 24;
       normalDiscountPercentage = 0;
       scholarshipDiscount = 0;
+      break;
     };
     default: {
       Serial.print("Invalid input. Can't show fees.");
     }
   }
 
+  delay(1000);
+
+  Serial.println("\nCalculating Fees... ");
+  delay(1000);  
+
+  // calculate estimated fees
   totalFees = (load * COST_PER_UNIT) + MISC_FEES;
   normalDiscount = totalFees - (totalFees * normalDiscountPercentage);
   totalDiscount = normalDiscount + scholarshipDiscount;
   estimatedFees = totalFees - totalDiscount;
 
-  Serial.print("Estimated Fees: ");  
-  Serial.print(estimatedFees);
+  // print status
+  Serial.print("\nStatus: ");  
+  if (scholarshipDiscount == 0) {
+    Serial.print("No Scholarship");
+  }
+  else {
+    Serial.print("With Scholarship");
+  }
+
+  // print estimated fees
+  Serial.print("\nEstimated Fees: ");  
+  Serial.println(estimatedFees);
   delay(1000);
   exit(0);
 }
